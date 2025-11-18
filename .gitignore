@@ -1,2 +1,7 @@
 Emotion.v1i.yolov8-obb/
 EmotionDetectVenv/
+.emotedetectvenv/
+weights/
+history/
+runs/
+runs\detect
