@@ -3,14 +3,13 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 
-# === YOLOv8-Emotion laden
-model = YOLO("bestv2_3.pt")  # trainiertes Modell
+# YOLOv8-Emotion laden
+model = YOLO("bestv2_3.pt")
 
-# === YuNet-ONNX: absoluter Pfad
 YUNET_PATH = "face_detection_yunet_2023mar.onnx"
 assert os.path.exists(YUNET_PATH), f"YuNet-ONNX fehlt: {YUNET_PATH}"
 
-# === YuNet-Detektor initialisieren
+# Init YuNet-Detector
 def make_yunet(model_path, input_size=(320, 320),
                score_threshold=0.6, nms_threshold=0.3, top_k=5000):
     if hasattr(cv2, "FaceDetectorYN_create"):
@@ -33,7 +32,7 @@ def make_yunet(model_path, input_size=(320, 320),
 
 detector = make_yunet(YUNET_PATH, input_size=(320, 320))
 
-# === Kamera
+# Camera
 cap = cv2.VideoCapture(0)
 if not cap.isOpened():
     raise RuntimeError("Kamera konnte nicht geöffnet werden.")
@@ -47,16 +46,16 @@ while True:
     if not ok:
         break
 
-    # Optional Selfie-Flip:
+    # optional Selfie-Flip:
     # frame = cv2.flip(frame, 1)
 
     h, w = frame.shape[:2]
 
-    # YuNet braucht die Inputgröße passend zum aktuellen Frame
+    # YuNet requires input size of current frame
     detector.setInputSize((w, h))
 
-    # Gesichter erkennen
-    # Rückgabeformat: (retval, faces); faces: Nx15 (x, y, w, h, 10 Landmarks, score)
+    # Face Recognition
+    # returns: (retval, faces); faces: Nx15 (x, y, w, h, 10 Landmarks, score)
     _, faces = detector.detect(frame)
 
     if faces is not None:
@@ -64,7 +63,7 @@ while True:
             x, y, bw, bh = f[:4]
             score = float(f[-1])
 
-            # Zu int & innerhalb der Bildgrenzen clippen
+            # Clipping
             x = clip(int(round(x)), 0, w - 1)
             y = clip(int(round(y)), 0, h - 1)
             bw = int(round(bw))
@@ -75,7 +74,7 @@ while True:
             if x2 <= x or y2 <= y:
                 continue
 
-            #Padding für mehr Kontext
+            # Padding
             pad = 0.1
             px = int(bw * pad); py = int(bh * pad)
             x0 = clip(x - px, 0, w - 1); y0 = clip(y - py, 0, h - 1)
@@ -85,21 +84,21 @@ while True:
             if face_crop.size == 0:
                 continue
 
-            # YOLO-Emotion auf dem Crop (einzelnes Bild → KEIN stream=True)
+            # IMPORTANT: YOLO only on face_crop
             results = model.predict(source=face_crop, imgsz=320, verbose=False)
 
             if results and len(results) > 0:
                 r = results[0]
 
-                # YOLOv8-cls: Wahrscheinlichkeiten in r.probs
+                # YOLOv8-cls: probability in r.probs
                 if hasattr(r, "probs") and r.probs is not None:
-                    cls_id = int(r.probs.top1)              # Index der wahrscheinlichsten Klasse
-                    conf = float(r.probs.top1conf)          # zugehörige Konfidenz
-                    label = model.names[cls_id]             # Klassenname aus dem Modell
+                    cls_id = int(r.probs.top1)              # Index of most likely class
+                    conf = float(r.probs.top1conf)          # confidence
+                    label = model.names[cls_id]             # class-name
                 else:
                     label, conf = "unknown", 0.0
 
-                # Zeichnen
+                # Display
                 cv2.rectangle(frame, (x0, y0), (x1, y1), (0, 255, 0), 2)
                 cv2.putText(frame, f"{label} ({conf:.2f})", (x0, max(0, y0 - 8)),
                             FONT, 0.7, (0, 255, 0), 2)
