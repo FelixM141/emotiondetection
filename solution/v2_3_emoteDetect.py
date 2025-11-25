@@ -35,7 +35,7 @@ detector = make_yunet(YUNET_PATH, input_size=(320, 320))
 # Camera
 cap = cv2.VideoCapture(0)
 if not cap.isOpened():
-    raise RuntimeError("Kamera konnte nicht geöffnet werden.")
+    raise RuntimeError("Could not open camera")
 
 
 FONT = cv2.FONT_HERSHEY_SIMPLEX
@@ -44,6 +44,7 @@ def clip(v, lo, hi): return max(lo, min(hi, v))
 while True:
     ok, frame = cap.read()
     if not ok:
+        print("No frame detected")
         break
 
     # optional Selfie-Flip:
