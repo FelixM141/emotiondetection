@@ -28,4 +28,5 @@ If there are any further questions:
 
 # When using this project
 The recognition has a higher likelyhood of failing with bad lighting. The ideal case is by using good lighting so the face of the "test person" is well lighted. There also might be a problem with our recognition when, glasses are worn.
-In the solution folder, is everything that is needed to run the code.
+**In the solution folder, is everything that is needed to run the code.** 
+
