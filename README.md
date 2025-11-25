@@ -2,7 +2,7 @@
 Emotion Detection using Yunet as face detection, and trained with Roboflow dataset for Emotion Detection.
 
 # Dataset
-The pictures that were had both colored and gray pictures, to find the exact same pictures, go to:
+The pictures that we used, had both colored and gray pictures, to find the exact same pictures, go to:
 * https://universe.roboflow.com/pea-edu/emotion-recognition-5ohyf
     * All training, validation and test images were cropped to 320x320 pixels.
 
@@ -20,4 +20,6 @@ The pictures that were had both colored and gray pictures, to find the exact sam
 # Requirements
 To install all of the dependencies, it is recommended to open a Venv and use !pip install -r requirements.txt
 
-#
+# When using this project
+The recognition has a higher likelyhood of failing with bad lighting. The ideal case is by using good lighting so the face of the "test person" is well lighted. There also might be a problem with our recognition when, glasses are worn.
+In the solution folder, is everything that is needed to run the code.
