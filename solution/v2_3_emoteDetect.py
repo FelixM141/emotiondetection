@@ -62,8 +62,8 @@ while True:
 
     if faces is not None:
         for f in faces:
-            x, y, bw, bh = f[:4]
-            score = float(f[-1])
+            x, y, bw, bh = f[:4] # <float> values
+            #score = float(f[-1])
 
             # Clipping (face should not be out of frame)
             x = clip(int(round(x)), 0, w - 1) # rounding because yunet works with subpixel coordinates
