@@ -87,15 +87,16 @@ while True:
                 continue
 
             # IMPORTANT: YOLO only on face_crop
+            # results is list of YOLO results-objects with len 1 (r.orig_img, r.probs, r.names, ...)
             results = model.predict(source=face_crop, imgsz=320, verbose=False)
 
             if results and len(results) > 0:
-                r = results[0]
+                r = results[0]  # r is YOLO-result-object which incl. r.probs
 
                 # YOLOv8-cls: probability in r.probs
-                if hasattr(r, "probs") and r.probs is not None:
+                if hasattr(r, "probs") and r.probs is not None: # r.probs delivers probability for all classes
                     cls_id = int(r.probs.top1)              # Index of most likely class
-                    conf = float(r.probs.top1conf)          # confidence
+                    conf = float(r.probs.top1conf)          # probability of most likely class
                     label = model.names[cls_id]             # class-name
                 else:
                     label, conf = "unknown", 0.0
