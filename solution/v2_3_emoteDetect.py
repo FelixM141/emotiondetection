@@ -64,7 +64,7 @@ while True:
             x, y, bw, bh = f[:4]
             score = float(f[-1])
 
-            # Clipping
+            # Clipping (face should not be out of frame)
             x = clip(int(round(x)), 0, w - 1)
             y = clip(int(round(y)), 0, h - 1)
             bw = int(round(bw))
