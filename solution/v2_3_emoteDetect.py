@@ -59,13 +59,13 @@ while True:
     # returns: (retval, faces); faces: Nx15 (x, y, w, h, 10 Landmarks, score)
     _, faces = detector.detect(frame)
 
-    if faces is not None:
+    if faces is not None: # every value in faces has x, y, w, h) bh and bw = box height and box width
         for f in faces:
             x, y, bw, bh = f[:4]
             score = float(f[-1])
 
             # Clipping (face should not be out of frame)
-            x = clip(int(round(x)), 0, w - 1)
+            x = clip(int(round(x)), 0, w - 1) # rounding because yunet works with subpixel coordinates
             y = clip(int(round(y)), 0, h - 1)
             bw = int(round(bw))
             bh = int(round(bh))
