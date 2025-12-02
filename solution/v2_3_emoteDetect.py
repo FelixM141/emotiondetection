@@ -57,7 +57,8 @@ while True:
 
     # Face Recognition
     # returns: (retval, faces); faces: Nx15 (x, y, w, h, 10 Landmarks, score)
-    _, faces = detector.detect(frame)
+    #_, faces = detector.detect(frame)
+    faces = detector.detect(frame)[1]
 
     if faces is not None:
         for f in faces:
