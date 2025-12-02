@@ -19,7 +19,15 @@ The pictures that we used, had both colored and gray pictures, to find the exact
 
 # Requirements
 To install all of the dependencies, it is recommended to open a Venv and use !pip install -r requirements.txt
+* Venv creation:
+    * python -m venv (VenvName/PathToVenv)
+    * ./(VenvName/PathToVenv)/Scripts/activate   
+    * !pip install -r requirements.txt
+    * To run the code: python .\v2_3_emoteDetect.py
+If there are any further questions:
+* https://docs.python.org/3/library/venv.html
 
 # When using this project
 The recognition has a higher likelyhood of failing with bad lighting. The ideal case is by using good lighting so the face of the "test person" is well lighted. There also might be a problem with our recognition when, glasses are worn.
-In the solution folder, is everything that is needed to run the code.
+**In the solution folder, is everything that is needed to run the code.** 
+
