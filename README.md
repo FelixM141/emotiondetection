@@ -20,10 +20,13 @@ The pictures that we used, had both colored and gray pictures, to find the exact
 # Requirements
 To install all of the dependencies, it is recommended to open a Venv and use !pip install -r requirements.txt
 * Venv creation:
-    * python -m venv (VenvName/PathToVenv)
-    * ./(VenvName/PathToVenv)/Scripts/activate   
-    * !pip install -r requirements.txt
-    * To run the code: python .\v2_3_emoteDetect.py
+    * `python -m venv (VenvName/PathToVenv)`
+    * `./(VenvName/PathToVenv)/Scripts/activate`
+* Run Application:
+    * `cd .\solution\`
+    * `pip install -r requirements.txt`
+    * To run the code: `python .\v2_3_emoteDetect.py` 
+
 If there are any further questions:
 * https://docs.python.org/3/library/venv.html
 
