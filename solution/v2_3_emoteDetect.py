@@ -59,7 +59,7 @@ while True:
     # returns: (retval, faces); faces: Nx15 (x, y, w, h, 10 Landmarks, score)
     _, faces = detector.detect(frame)
 
-    if faces is not None: # every value in faces has x, y, w, h) bh and bw = box height and box width
+    if faces is not None:
         for f in faces:
             x, y, bw, bh = f[:4]
             score = float(f[-1])
