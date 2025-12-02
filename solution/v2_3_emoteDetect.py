@@ -3,15 +3,14 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 
-# YOLOv8-Emotion laden
+
 model = YOLO("bestv2_3.pt")
 
 YUNET_PATH = "face_detection_yunet_2023mar.onnx"
 assert os.path.exists(YUNET_PATH), f"YuNet-ONNX fehlt: {YUNET_PATH}"
 
 # Init YuNet-Detector
-def make_yunet(model_path, input_size=(320, 320),
-               score_threshold=0.6, nms_threshold=0.3, top_k=5000):
+def make_yunet(model_path, input_size=(320, 320), score_threshold=0.6, nms_threshold=0.3, top_k=5000):
     if hasattr(cv2, "FaceDetectorYN_create"):
         return cv2.FaceDetectorYN_create(
             model_path, "", input_size, score_threshold, nms_threshold, top_k,
