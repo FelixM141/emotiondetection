@@ -3,8 +3,14 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 
+import torch
+
+# Use mps backend on macOS with Apple silicon instead of cpu
+device = "mps" if torch.backends.mps.is_available() else "cpu"
+print(f"Using device: {device}")
 
 model = YOLO("bestv2_3.pt")
+model = model.to(device)
 
 YUNET_PATH = "face_detection_yunet_2023mar.onnx"
 assert os.path.exists(YUNET_PATH), f"YuNet-ONNX fehlt: {YUNET_PATH}"
