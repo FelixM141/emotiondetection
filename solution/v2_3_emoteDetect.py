@@ -5,6 +5,11 @@ from ultralytics import YOLO
 
 import torch
 
+MIN_FACE_W = 60
+MIN_FACE_H = 60
+MIN_FACE_AREA = 60*60
+
+
 # Use mps backend on macOS with Apple silicon instead of cpu
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 print(f"Using device: {device}")
@@ -38,7 +43,7 @@ def make_yunet(model_path, input_size=(320, 320), score_threshold=0.6, nms_thres
 detector = make_yunet(YUNET_PATH, input_size=(320, 320))
 
 # Camera
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 if not cap.isOpened():
     raise RuntimeError("Could not open camera")
 
@@ -75,6 +80,10 @@ while True:
             y = clip(int(round(y)), 0, h - 1)
             bw = int(round(bw))
             bh = int(round(bh))
+
+            if bw < MIN_FACE_W or bh < MIN_FACE_H:
+                continue
+
             x2 = clip(x + bw, 0, w - 1)
             y2 = clip(y + bh, 0, h - 1)
 
