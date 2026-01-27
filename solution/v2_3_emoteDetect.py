@@ -43,7 +43,7 @@ def make_yunet(model_path, input_size=(320, 320), score_threshold=0.6, nms_thres
 detector = make_yunet(YUNET_PATH, input_size=(320, 320))
 
 # Camera
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 if not cap.isOpened():
     raise RuntimeError("Could not open camera")
 
@@ -106,14 +106,23 @@ while True:
 
             if results and len(results) > 0:
                 r = results[0]  # r is YOLO-result-object which incl. r.probs
+                
 
                 # YOLOv8-cls: probability in r.probs
-                if hasattr(r, "probs") and r.probs is not None: # r.probs delivers probability for all classes
-                    cls_id = int(r.probs.top1)              # Index of most likely class
-                    conf = float(r.probs.top1conf)          # probability of most likely class
-                    label = model.names[cls_id]             # class-name
-                else:
-                    label, conf = "unknown", 0.0
+                if hasattr(r, "probs") and r.probs is not None:
+                    probs = r.probs.data.clone()  # Tensor mit allen Klassen-Wahrscheinlichkeiten
+
+                    # Bias
+                    HAPPY_ID = 2
+                    SAD_ID = 4
+                    probs[HAPPY_ID] *= 1.2
+                    probs[SAD_ID] *= 1.1
+
+                    # Neue Top-Klasse bestimmen
+                    cls_id = int(torch.argmax(probs))
+                    conf = float(probs[cls_id])
+                    label = model.names[cls_id]
+
 
                 # Display
                 cv2.rectangle(frame, (x0, y0), (x1, y1), (0, 255, 0), 2)
