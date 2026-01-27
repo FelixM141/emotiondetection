@@ -23,8 +23,8 @@ To install all of the dependencies, it is recommended to open a Venv and use !pi
     * `python -m venv (VenvName/PathToVenv)`
     * `./(VenvName/PathToVenv)/Scripts/activate`
 * Run Application:
-    * `cd .\solution\`
     * `pip install -r requirements.txt`
+    * `cd .\solution\`
     * To run the code: `python .\v2_3_emoteDetect.py` 
 
 If there are any further questions:
