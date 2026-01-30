@@ -51,6 +51,16 @@ if not cap.isOpened():
 FONT = cv2.FONT_HERSHEY_SIMPLEX
 def clip(v, lo, hi): return max(lo, min(hi, v))
 
+WINDOW_NAME = "Emotion Detection (YuNet + YOLO)"
+
+cv2.namedWindow(WINDOW_NAME, cv2.WINDOW_NORMAL)
+cv2.setWindowProperty(
+    WINDOW_NAME,
+    cv2.WND_PROP_FULLSCREEN,
+    cv2.WINDOW_FULLSCREEN
+)
+
+
 while True:
     ok, frame = cap.read()
     if not ok:
@@ -130,7 +140,28 @@ while True:
                             FONT, 0.7, (0, 255, 0), 2)
 
 
-    cv2.imshow("Emotion Detection (YuNet + YOLO)", frame)
+    # Fenstergröße dynamisch abfragen
+    wx, wy, ww, wh = cv2.getWindowImageRect(WINDOW_NAME)
+
+    fh, fw = frame.shape[:2]
+
+    # Skalierung ohne Verzerrung (Letterbox)
+    scale = min(ww / fw, wh / fh)
+    new_w = int(fw * scale)
+    new_h = int(fh * scale)
+
+    resized = cv2.resize(frame, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
+
+    # Schwarzer Hintergrund
+    canvas = np.zeros((wh, ww, 3), dtype=np.uint8)
+
+    # Zentrieren
+    x_offset = (ww - new_w) // 2
+    y_offset = (wh - new_h) // 2
+    canvas[y_offset:y_offset + new_h, x_offset:x_offset + new_w] = resized
+
+    cv2.imshow(WINDOW_NAME, canvas)
+
     if (cv2.waitKey(1) & 0xFF) == 27:  # ESC
         break
 
